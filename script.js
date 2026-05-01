@@ -846,6 +846,18 @@ let updatedPhotoLink = "";
 document.getElementById("myForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  // cek FOTO KM wajib ada
+  const previewKM = document.getElementById("previewKM");
+  const hasPhotoKM =
+    submitPhotoKMBase64 ||
+    submitPhotoKMLink ||
+    (previewKM && previewKM.src);
+
+  if (!hasPhotoKM) {
+    alert("📷 Foto KM wajib diupload / paste / isi link terlebih dahulu!");
+    return;
+  }
+
   let formData = new FormData(e.target);
   formData.set("action", "submit");
 
@@ -855,12 +867,18 @@ document.getElementById("myForm").addEventListener("submit", async (e) => {
   formData.set("Jam update", "");
 
   // kirim Foto KM
-  if (submitPhotoKMBase64) {
+  if (submitPhotoKMLink) {
+    formData.set("Foto KM", submitPhotoKMLink);
+  } else if (submitPhotoKMBase64) {
     formData.set("Foto KM", submitPhotoKMBase64);
+  } else if (previewKM?.src) {
+    formData.set("Foto KM", previewKM.src);
   }
 
-  // kirim Foto Bukti
-  if (submitPhotoBuktiBase64) {
+  // Foto Bukti optional
+  if (submitPhotoBuktiLink) {
+    formData.set("Foto Bukti", submitPhotoBuktiLink);
+  } else if (submitPhotoBuktiBase64) {
     formData.set("Foto Bukti", submitPhotoBuktiBase64);
   }
 
@@ -877,10 +895,18 @@ document.getElementById("myForm").addEventListener("submit", async (e) => {
       const savedName = localStorage.getItem("reservationName");
       e.target.reset();
 
-      // reset preview
+      // reset semua variable foto
       submitPhotoKMBase64 = "";
+      submitPhotoKMLink = "";
       submitPhotoBuktiBase64 = "";
+      submitPhotoBuktiLink = "";
 
+      updatedPhotoKMBase64 = "";
+      updatedPhotoKMLink = "";
+      updatedPhotoBase64 = "";
+      updatedPhotoLink = "";
+
+      // reset preview
       document.getElementById("previewKM").src = "";
       document.getElementById("previewBukti").src = "";
 
