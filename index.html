@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>BBM km</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Form Input BBM KRP</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- ✅ Favicon untuk Browser, Mobile, dan Desktop -->
+  <link rel="icon" type="image/png" sizes="16x16" href="https://i.postimg.cc/3rVQZSTb/Logo-pertamina-emd.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/3rVQZSTb/Logo-pertamina-emd.jpg">
+  <link rel="icon" type="image/png" sizes="48x48" href="https://i.postimg.cc/3rVQZSTb/Logo-pertamina-emd.jpg">
+  <link rel="icon" type="image/png" sizes="64x64" href="https://i.postimg.cc/3rVQZSTb/Logo-pertamina-emd.jpg">
+  <link rel="icon" type="image/png" sizes="180x180" href="https://i.postimg.cc/3rVQZSTb/Logo-pertamina-emd.jpg">
+  <link rel="shortcut icon" href="https://i.postimg.cc/3rVQZSTb/Logo-pertamina-emd.jpg" type="image/png">
+</head>
+
+<body>
+  <!-- ===== LOGIN PAGE ===== -->
+  <div id="loginPage">
+    <!-- 🔹 Sisi kiri (Wallpaper & Branding) -->
+    <div class="login-wallpaper">
+      <div class="overlay"></div>
+      <div class="branding">
+        <h1>Fuel Efficiency<br><span>Monitoring System</span></h1>
+        <p>Smart Dashboard for Vehicle & Fuel Management EMD</p>
+      </div>
+    </div>
+
+    <!-- 🔹 Sisi kanan (Form Login) -->
+    <div class="login-card">
+      <div class="login-header">
+        <img src="https://i.postimg.cc/25jBDZrH/GS-dispacer-removebg-preview.png" alt="Logo" class="login-logo" />
+        <h2>Welcome Back Dispatcher</h2>
+        <p class="login-subtitle">Silakan masuk untuk melanjutkan</p>
+      </div>
+
+      <form onsubmit="event.preventDefault(); login();">
+        <input type="text" id="loginEmail" placeholder="Email" required />
+        <input type="password" id="loginPassword" placeholder="Password" required />
+        <button type="button" onclick="login()">Login</button>
+        <div class="login-error" id="loginError"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== FUTURISTIC LOADER ===== -->
+  <div id="loader">
+    <div class="spinner"></div>
+    <p>Memeriksa data login...</p>
+  </div>
+
+  <!-- ===== STYLE (CSS) ===== -->
+
+  <meta charset="UTF-8">
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div class="text-loading">Silakan tunggu...</div>
+  </div>
+
+  <title>Dashboard BBM</title>
+  <link rel="stylesheet" href="style.css">
+  <div class="sidebar" id="sidebar">
+    <!-- Tombol buka/tutup sidebar -->
+    <div class="toggle-btn" onclick="toggleSidebar()">
+      <img id="toggleIcon" src="https://i.postimg.cc/4yZHwCHr/icon-sidebar.png" alt="Toggle">
+    </div>
+
+    <div class="sidebar-header">
+      <img src="https://i.postimg.cc/NMRDPgT5/GS-dispacer.jpg" alt="Logo" class="sidebar-logo">
+      <h2> Menu</h2>
+    </div>
+    <div class="online-users">
+      <h3>👤 Online</h3>
+
+      <div id="onlineUsers"></div>
+
+      <!-- 📝 INPUT KIRIM PESAN -->
+      <div id="noteBox" style="
+    display:none;
+    margin-top:8px;
+    padding-top:6px;
+    border-top:1px solid rgba(255,255,255,.25);
+  ">
+        <div id="noteTargetName" style="font-size:10px;color:#fff;margin-bottom:4px">
+          💬 Kirim pesan
+        </div>
+
+        <textarea id="noteInput" placeholder="Tulis pesan..." style="
+        width:100%;
+        height:45px;
+        font-size:10px;
+        resize:none;
+        border-radius:6px;
+        padding:5px;
+        border:none;
+        outline:none;
+      "></textarea>
+
+        <button id="btnSendNote" onclick="sendNote()" style="
+  width:100%;
+  margin-top:4px;
+  font-size:10px;
+  padding:5px;
+  border:none;
+  border-radius:6px;
+  background:#4caf50;
+  color:#fff;
+  cursor:pointer;
+">
+          Kirim
+        </button>
+
+        <!-- 🔘 BATAL & HAPUS -->
+        <div style="display:flex; gap:4px; margin-top:4px;">
+          <button onclick="cancelNote()" style="
+    flex:1;
+    font-size:10px;
+    padding:5px;
+    border:none;
+    border-radius:6px;
+    background:#777;
+    color:#fff;
+    cursor:pointer;
+  ">
+            Batal
+          </button>
+
+          <button onclick="deleteNote()" style="
+    flex:1;
+    font-size:10px;
+    padding:5px;
+    border:none;
+    border-radius:6px;
+    background:#e53935;
+    color:#fff;
+    cursor:pointer;
+  ">
+            Hapus
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <button class="message-btn" onclick="toggleMessagePanel()">📩 Notif
+      <span id="notifBadge" class="notif-badge">!</span>
+    </button>
+
+    <button onclick="showSection('bbmStatementSection', true)">
+      <img src="https://i.postimg.cc/d1BXxyDW/form-input.jpg" style="width:20px;height:20px;margin-right:5px;">
+      <span>Surat Pernyataan BBM</span>
+    </button>
+
+    <button onclick="showSection('dashboardBBMSection', true)">
+      <img src="https://i.postimg.cc/d1BXxyDW/form-input.jpg" alt="Dashboard Icon" style="width:20px; height:20px; vertical-align:middle; margin-right:5px;">
+      <span>Dashboard BBM</span>
+    </button>
+
+    <div id="messagePanel" class="message-panel hidden">
+      <h3>Data Belum Diperbarui</h3>
+      <ul id="messageList"></ul>
+    </div>
+
+    <button onclick="showSection('formSection')">
+      <img src="https://i.postimg.cc/d1BXxyDW/form-input.jpg" alt="Form Icon" style="width:20px; height:20px; vertical-align:middle; margin-right:5px;">
+      <span>Form Input</span>
+    </button>
+
+    <button onclick="showSection('reportSection', true)">
+      <img src="https://i.postimg.cc/d1BXxyDW/form-input.jpg" alt="Report Icon" style="width:20px; height:20px; vertical-align:middle; margin-right:5px;">
+      <span>Report Submit/Update data</span>
+    </button>
+
+    <button onclick="showSection('vehicleReportSection', true)">
+      <img src="https://i.postimg.cc/d1BXxyDW/form-input.jpg" alt="Vehicle Report Icon" style="width:20px; height:20px; vertical-align:middle; margin-right:5px;">
+      <span>Report BBM per Kendaraan</span>
+    </button>
+
+    <button onclick="showSection('driverReportSection', true)">
+      <img src="https://i.postimg.cc/d1BXxyDW/form-input.jpg" alt="Driver Report Icon" style="width:20px; height:20px; vertical-align:middle; margin-right:5px;">
+      <span>Report BBM per Driver</span>
+    </button>
+
+    <button onclick="showSection('bbmTrendSection', true)">
+      <img src="https://i.postimg.cc/d1BXxyDW/form-input.jpg" alt="BBM Trend Icon" style="width:20px; height:20px; vertical-align:middle; margin-right:5px;">
+      <span>Report Tren BBM</span>
+    </button>
+
+    <button onclick="showSection('bbmAbnormalSection', true)">
+      <img src="https://i.postimg.cc/d1BXxyDW/form-input.jpg" alt="Abnormal BBM Icon" style="width:20px; height:20px; vertical-align:middle; margin-right:5px;">
+      <span>Report BBM Abnormal</span>
+    </button>
+
+    <button onclick="showSection('vehicleChartSection', true)">
+      <img src="https://i.postimg.cc/d1BXxyDW/form-input.jpg" alt="Vehicle Chart Icon" style="width:20px; height:20px; vertical-align:middle; margin-right:5px;">
+      <span>Report Grafik per Kendaraan</span>
+    </button>
+
+    <button onclick="showSection('driverChartSection', true)">
+      <img src="https://i.postimg.cc/d1BXxyDW/form-input.jpg" alt="Driver Chart Icon" style="width:20px; height:20px; vertical-align:middle; margin-right:5px;">
+      <span>Report Grafik per Driver</span>
+    </button>
+
+    <button onclick="showSection('realPerjalananReportSection', true)">
+      <img src="https://i.postimg.cc/d1BXxyDW/form-input.jpg" style="width:20px; height:20px; margin-right:5px;">
+      <span>Report Total Real Perjalanan</span>
+    </button>
+
+    <button onclick="showSection('jobReportVTSSection', true)">
+      <img src="https://i.postimg.cc/d1BXxyDW/form-input.jpg" style="width:20px;height:20px;margin-right:5px;">
+      <span>Job Report VTS</span>
+    </button>
+
+    <button onclick="showSection('distanceMeasureSection', true)">
+      <img src="https://i.postimg.cc/d1BXxyDW/form-input.jpg" alt="Map Icon" style="width:20px; height:20px; vertical-align:middle; margin-right:5px;">
+      <span>Ukur Jarak Manual</span>
+    </button>
+
+  </div>
+  <div class="main">
+    <header>
+      <div class="header-content">
+        <div class="header-title">MONITORING BBM KRP FIELD & KRP ZONA PERTAMINA JAMBI</div>
+        <div class="header-whatsapp">
+          <span>
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WA">
+            Dispatcher: <a href="https://wa.me/628117481338" target="_blank">+62 811-7481-338</a>
+          </span>
+          <span>
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WA">
+            HSE DV Field: <a href="https://wa.me/6281368880205" target="_blank">+62 813-6888-0205</a>
+          </span>
+          <span>
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WA">
+            HSE DV Zona: <a href="https://wa.me/6289988776655" target="_blank">+62 899-8877-6655</a>
+          </span>
+          <span>
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WA">
+            Teknisi VTS: <a href="https://wa.me/62895382281515" target="_blank">+62 895-3822-81515</a>
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <div class="user-info">
+      <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="user">
+      <span id="loggedInUser">Guest</span>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+    <div class="label-links">
+      <span class="label-btn" onclick="window.open('https://web.arvento.com/home.aspx', '_blank')">🌐 web Arvento</span>
+      <span class="label-btn" onclick="window.open('https://www.google.com/maps', '_blank')">🗺️ Google maps</span>
+      <span class="label-btn" onclick="window.open('https://veronest.pep.pertamina.com/Login.aspx?enc=HAd1rtUZbsmBBo0sEDuy4U2vPzpkTelv19DifeZ3rEY=', '_blank')">🌐 web Veronest</span>
+
+      <!-- ========== FORM SECTION ========== -->
+      <div id="formSection" class="card main-content">
+        <!-- === PARAMETER RASIO SECTION === -->
+        <div id="rasioBox">
+          <h3> Parameter Rasio BBM</h3>
+
+          <div class="rasio-grid">
+
+            <div class="rasio-cell" style="background:#ff8080;">
+              1:7
+              <div id="rasioCalc_7" class="nilai-rasio">0</div>
+            </div>
+
+            <div class="rasio-cell" style="background:#ffcc00;">
+              1:8
+              <div id="rasioCalc_8" class="nilai-rasio">0</div>
+            </div>
+
+            <div class="rasio-cell" style="background:#ffdb4d;">
+              1:9
+              <div id="rasioCalc_9" class="nilai-rasio">0</div>
+            </div>
+
+            <div class="rasio-cell" style="background:#ffe680;">
+              1:10
+              <div id="rasioCalc_10" class="nilai-rasio">0</div>
+            </div>
+
+            <div class="rasio-cell" style="background:#8cd98c;">
+              1:11
+              <div id="rasioCalc_11" class="nilai-rasio">0</div>
+            </div>
+
+            <div class="rasio-cell" style="background:#66cc66;">
+              1:12
+              <div id="rasioCalc_12" class="nilai-rasio">0</div>
+            </div>
+
+            <div class="rasio-cell" style="background:#66cc66;">
+              1:13
+              <div id="rasioCalc_13" class="nilai-rasio">0</div>
+            </div>
+          </div>
+          <div class="rasio-result">
+            <strong>Rasio Aktual:</strong> <span id="rasioDisplay">1:0</span>
+          </div>
+        </div>
+
+        <h2>Form Input Data BBM KRP</h2>
+        <form id="myForm">
+          <div class="form-column">
+            <div class="form-group">
+              <label for="Date">Tanggal:</label>
+              <input type="date" id="Date" name="Date" required>
+            </div>
+
+            <div class="form-group">
+              <label>Fungsi:</label>
+              <select name="Fungsi" required>
+                <option value="">-- Pilih Fungsi --</option>
+                <option>Ambulance K.A.S</option>
+                <option>Ambulance Tempino</option>
+                <option>Ambulance SGC</option>
+                <option>Ambulance KTT</option>
+                <option>HSE KAS</option>
+                <option>HSE Tempino</option>
+                <option>Produksi</option>
+                <option>RAM</option>
+                <option>SCM-POOL</option>
+                <option>Security</option>
+                <option>WOWS</option>
+                <option>SCM-Zona 1 jambi</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>WKP:</label>
+              <select name="WKP" required>
+                <option value="">-- Pilih WKP --</option>
+                <option>Tempino</option>
+                <option>SGC</option>
+                <option>Petaling</option>
+                <option>Kenali</option>
+                <option>Bajubang</option>
+                <option>Betung</option>
+                <option>PPS</option>
+                <option>SKB</option>
+                <option>B.A.U-Ramba</option>
+                <option>B.A.U-Prabumulih</option>
+                <option>B.A.U-Pendopo</option>
+                <option>B.A.U-Pangsu</option>
+                <option>B.A.U-Lirik</option>
+                <option>B.A.U-Limau</option>
+                <option>B.A.U-Adera</option>
+                <option>B.A.U-Jamer</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Discription:</label>
+              <input type="text" name="Discription">
+            </div>
+
+            <div class="form-group">
+              <label>Driver:</label>
+              <select name="Driver" required>
+                <option value="">-- Pilih Driver --</option>
+                <option>Aan Suharyana</option>
+                <option>Aan Septiansyah</option>
+                <option>Ade Trio Saputra</option>
+                <option>Ade Lutfi</option>
+                <option>Ade Satya Rhamadani</option>
+                <option>Adi Suwarno</option>
+                <option>Adi Subroto</option>
+                <option>Agil Oktafiani</option>
+                <option>Agung Sedayu</option>
+                <option>Agung Pratama</option>
+                <option>Agus Santoso</option>
+                <option>Ahmad Saf'i</option>
+                <option>Al amin adelta</option>
+                <option>Alfranto</option>
+                <option>Ali Akbar</option>
+                <option>Andi Jasa</option>
+                <option>Andi Susilo</option>
+                <option>Andika Saputra</option>
+                <option>Agung Pratama</option>
+                <option>Andre Nova</option>
+                <option>Andrean Rudi</option>
+                <option>Andrian Abel Pratama</option>
+                <option>Angga Saputra</option>
+                <option>Angga Syaputra</option>
+                <option>Aprinal Andri</option>
+                <option>Ardesta</option>
+                <option>Ardiansyah</option>
+                <option>Ariadi</option>
+                <option>Aris Saputra</option>
+                <option>Ardi Surya</option>
+                <option>Audi Muhar Sakti</option>
+                <option>Bayu Firdaus</option>
+                <option>Bayu Hermansyah</option>
+                <option>Budi Sulistyo</option>
+                <option>Budiyanto.R</option>
+                <option>Chaerudin</option>
+                <option>Cristiandi Saputra</option>
+                <option>Dedek Rahma P</option>
+                <option>Deden Krisna</option>
+                <option>Dedi Firmansyah</option>
+                <option>Dedi Hamdani</option>
+                <option>Dedi Kurniawan.(zona)</option>
+                <option>Dedi Kurniawan.(Field)</option>
+                <option>Deni Suanto</option>
+                <option>Dian syahruli</option>
+                <option>Didi Ardiansyah</option>
+                <option>Didi Rosadi</option>
+                <option>Diki Ferdiono</option>
+                <option>Dimas Anggriawan</option>
+                <option>Dimas kurnia pamungkas</option>
+                <option>Dodi Friady</option>
+                <option>Ebri Alfandi</option>
+                <option>Edi Junaidi</option>
+                <option>Edi Nofrizal</option>
+                <option>Edo Irfan Nugraha</option>
+                <option>Edra Wanedi</option>
+                <option>Egi Pradanaputra</option>
+                <option>Eko Feriyanto</option>
+                <option>Fadli Apri</option>
+                <option>Febri Yenita Pratama</option>
+                <option>Ferdi Novriansyah</option>
+                <option>Fery Gagarin</option>
+                <option>Fikriyudi Ashrofi</option>
+                <option>Frans Manulu</option>
+                <option>Gusepriadi</option>
+                <option>Hadi Rusmono</option>
+                <option>Hafid</option>
+                <option>Hamdani</option>
+                <option>Hari Bowo</option>
+                <option>Hariza Jepri</option>
+                <option>Hartaji</option>
+                <option>Hendra Saputra</option>
+                <option>Hendri</option>
+                <option>Hendriyanto</option>
+                <option>Heriyadi(GS)</option>
+                <option>Ilham Kholik</option>
+                <option>Iman Surya Priyatna</option>
+                <option>Iriandi</option>
+                <option>Irwanto</option>
+                <option>Iwan Kurniawan</option>
+                <option>Iwan Nugraha</option>
+                <option>Iwan Saputra</option>
+                <option>Iwan Gunawan</option>
+                <option>Jaswadi</option>
+                <option>Jonson Sarimin</option>
+                <option>Junianto</option>
+                <option>Khevin Haryono</option>
+                <option>Kodin</option>
+                <option>Kuswara</option>
+                <option>Latif</option>
+                <option>Leriansyah</option>
+                <option>Madelian harianto</option>
+                <option>M Abriadi</option>
+                <option>M Iqbal</option>
+                <option>M Ridwan</option>
+                <option>M Wahyudi</option>
+                <option>M Hafiz</option>
+                <option>Marjoni</option>
+                <option>Mayudi Supratman</option>
+                <option>Muhammad Reza</option>
+                <option>Muhammad Rivaldi</option>
+                <option>Musriyanto</option>
+                <option>Niko Nirwana</option>
+                <option>Nofrie Firmansyah</option>
+                <option>Nopi Maulana</option>
+                <option>Nurhidayattullah</option>
+                <option>Nur Fathonah</option>
+                <option>Oki Wirahandi</option>
+                <option>Pahrudin</option>
+                <option>Piko Dela Pratama</option>
+                <option>Primulyadi</option>
+                <option>Priyantoro</option>
+                <option>Purwadi</option>
+                <option>R Agus cik</option>
+                <option>Rahmadani</option>
+                <option>Rahmat Syukur Pratama</option>
+                <option>Ramli Situmorang</option>
+                <option>Ravi Anggara</option>
+                <option>Rendi Gustiawan</option>
+                <option>Rendi Setirianto</option>
+                <option>Restu Satrio</option>
+                <option>Reza Kurniadi</option>
+                <option>Riko Fristian</option>
+                <option>Riko Permana</option>
+                <option>Rio</option>
+                <option>Rizkho Fajar Mulyawan</option>
+                <option>Rudi Heriadi</option>
+                <option>Rudi Winarno</option>
+                <option>Ruli Edimulya</option>
+                <option>Said Ahmad Taufik</option>
+                <option>Sandro Hanspramana</option>
+                <option>Satri Maulana</option>
+                <option>Satria Ariansyah</option>
+                <option>Satria Pratama</option>
+                <option>Setiawan</option>
+                <option>Sigit Wibowo</option>
+                <option>Sugeng Mulyono</option>
+                <option>Sunarto</option>
+                <option>Suryadi</option>
+                <option>Sutrisno</option>
+                <option>Suyadi</option>
+                <option>Syafarudin</option>
+                <option>Taufik Hidayat</option>
+                <option>Teguh Rahmat</option>
+                <option>Thomas Oka</option>
+                <option>Tridarsak</option>
+                <option>Trisnanto</option>
+                <option>Trisno Sumadi</option>
+                <option>Usman Deva</option>
+                <option>Wagiono</option>
+                <option>Wahyu ilham</option>
+                <option>Wahyudi Saputra</option>
+                <option>Wilfridus Krisna Priadika</option>
+                <option>windy (SW-01)</option>
+                <option>Yopi Delvira</option>
+                <option>Yuda Priyatna</option>
+                <option>Yudi Sunandi</option>
+                <option>Yuligus</option>
+                <option>Zulkifli</option>
+                <option>Yudis Pramana</option>
+                <option>Driver Bantuan Antar unit</option>
+
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>KRP-Nopol:</label>
+              <select name="KRP-Nopol" required>
+                <option value="">-- Pilih KRP-Nopol </option>
+                <option>JBI-01 BH 1216 YV </option>
+                <option>JBI-02 BH 1127 YV </option>
+                <option>JBI-03 BH 1126 YV</option>
+                <option>JBI-04 BH 1125 YV</option>
+                <option>JBI-05 BH 8578 NA</option>
+                <option>JBI-06 BH 8589 NA</option>
+                <option>JBI-07 BH 8582 NA</option>
+                <option>JBI-08 BH 8629 NA</option>
+                <option>JBI-09 BH 8610 NA</option>
+                <option>JBI-10 BH 8587 NA</option>
+                <option>JBI-11 BH 8583 NA</option>
+                <option>JBI-12 BH 8632 NA</option>
+                <option>JBI-13 BH 8602 NA</option>
+                <option>JBI-14 BH 8590 NA</option>
+                <option>JBI-15 BH 8577 NA</option>
+                <option>JBI-16 BH 8566 NA</option>
+                <option>JBI-17 BH 8634 NA</option>
+                <option>JBI-18 BH 8607 NA</option>
+                <option>JBI-19 BH 8603 NA</option>
+                <option>JBI-20 BH 8618 NA</option>
+                <option>JBI-21 BH 8621 NA</option>
+                <option>JBI-22 BH 8619 NA</option>
+                <option>JBI-23 BH 8627 NA</option>
+                <option>JBI-24 BH 8620 NA</option>
+                <option>JBI-25 BH 8579 NA</option>
+                <option>JBI-26 BH 8576 NA</option>
+                <option>JBI-27 BH 8586 NA</option>
+                <option>JBI-28 BH 8574 NA</option>
+                <option>JBI-29 BH 8622 NA</option>
+                <option>JBI-30 BH 8605 NA</option>
+                <option>JBI-31 BH 8612 NA</option>
+                <option>JBI-32 BH 8615 NA</option>
+                <option>JBI-33 BH 8606 NA</option>
+                <option>JBI-34 BH 8613 NA</option>
+                <option>JBI-35 BH 8604 NA</option>
+                <option>JBI-36 BH 8611 NA</option>
+                <option>JBI-37 BH 8630 NA</option>
+                <option>JBI-38 BH 8614 NA</option>
+                <option>JBI-39 BH 8570 NA</option>
+                <option>JBI-40 BH 8567 NA</option>
+                <option>JBI-41 BH 8626 NA</option>
+                <option>JBI-42 BH 8571 NA</option>
+                <option>JBI-43 BH 8568 NA</option>
+                <option>JBI-44 BH 8617 NA</option>
+                <option>JBI-45 BH 8633 NA</option>
+                <option>JBI-46 BH 8628 NA</option>
+                <option>JBI-47 BH 8635 NA</option>
+                <option>JBI-48 BH 8625 NA</option>
+                <option>JBI-49 BH 8608 NA</option>
+                <option>JBI-50 BH 8623 NA</option>
+                <option>JBI-51 BH 8609 NA</option>
+                <option>JBI-52 BH 8565 NA</option>
+                <option>JBI-53 BH 8581 NA</option>
+                <option>JBI-54 BH 8575 NA</option>
+                <option>JBI-55 BH 8564 NA</option>
+                <option>JBI-56 BH 8580 NA</option>
+                <option>JBI-57 BH 8573 NA</option>
+                <option>JBI-58 BH 8569 NA</option>
+                <option>JBI-59 BH 8624 NA</option>
+                <option>JBI-60 BH 8616 NA</option>
+                <option>JBI-61 BH 8584 NA</option>
+                <option>JBI-62 BH 8631 NA</option>
+                <option>JBI-63 BH 8592 NA</option>
+                <option>JBI-64 BH 8572 NA</option>
+                <option>PHR1-01 BH 1294 YR </option>
+                <option>PHR1-02 BH 1290 YR </option>
+                <option>PHR1-03 BH 1292 YR</option>
+                <option>PHR1-04 BH 1289 YR </option>
+                <option>PHR1-05 BH 1291 YR </option>
+                <option>PHR1-06 BH 1293 YR </option>
+                <option>PHR1-07 BH 1275 YR </option>
+                <option>PHR1-08 BH 1274 YR </option>
+                <option>PHR1-09 BH 1270 YR </option>
+                <option>PHR1-10 BH 1269 YR </option>
+                <option>PHR1-11 BH 1273 YR </option>
+                <option>PHR1-12 BH 1277 YR </option>
+                <option>PHR1-13 BH 1278 YR </option>
+                <option>PHR1-14 BH 1279 YR </option>
+                <option>PHR1-15 BH 1272 YR </option>
+                <option>PHR1-16 BH 1276 YR </option>
+                <option>PHR1-17 BH 1271 YR </option>
+                <option>PHR1-18 BH 1860 YQ </option>
+                <option>PHR1-19 BH 8706 MZ </option>
+                <option>PHR1-20 BH 8708 MZ </option>
+                <option>PHR1-21 BH 8707 MZ </option>
+                <option>PHR1-22 BH 7419 AI </option>
+                <option>PHR1-23 BH 7420 AI </option>
+                <option>PHR1-24 BH 9176 AE </option>
+                <option>PHR1-25 BH 9175 AE </option>
+                <option>PHR1-26 BH 9174 AE </option>
+                <option>PHR1-27 BH 1393 YT </option>
+                <option>PHR1-28 BH 1392 YT </option>
+                <option>PSU-11 BK 1076 PZ </option>
+                <option>SW-01 Phanter</option>
+                <option>BM 8815 DL (Spare DM-01)</option>
+                <option>BG 1841 BP (Spare DM-02)</option>
+                <option>BG 8332 BL (Spare DM-03)</optin>
+                <option>F 7213 UA Spare Hiace</option>
+                <option>Supra X (Motor)</option>
+                <option>B.A.U-Jamer 1</option>
+                <option>B.A.U-Jamer 2</option>
+                <option>B.A.U-Jamer 3</option>
+                <option>B.A.U-Jamer 4</option>
+                <option>B.A.U-Ramba 1</option>
+                <option>B.A.U-Ramba 2</option>
+                <option>B.A.U-Ramba 3</option>
+                <option>B.A.U-Ramba 4</option>
+                <option>B.A.U-Prabumulih 1</option>
+                <option>B.A.U-Prabumulih 2</option>
+                <option>B.A.U-Prabumulih 3</option>
+                <option>B.A.U-Prabumulih 4</option>
+                <option>B.A.U-Pendopo 1</option>
+                <option>B.A.U-Pendopo 2</option>
+                <option>B.A.U-Pendopo 3</option>
+                <option>B.A.U-Pendopo 4</option>
+                <option>B.A.U-Pangsu 1</option>
+                <option>B.A.U-Pangsu 2</option>
+                <option>B.A.U-Pangsu 3</option>
+                <option>B.A.U-Pangsu 4</option>
+                <option>B.A.U-Lirik 1</option>
+                <option>B.A.U-Lirik 2</option>
+                <option>B.A.U-Lirik 3</option>
+                <option>B.A.U-Lirik 4</option>
+                <option>B.A.U-Limau 1</option>
+                <option>B.A.U-Limau 2</option>
+                <option>B.A.U-Limau 3</option>
+                <option>B.A.U-Limau 4</option>
+                <option>B.A.U-Adera 1</option>
+                <option>B.A.U-Adera 2</option>
+                <option>B.A.U-Adera 3</option>
+                <option>B.A.U-Adera 4</option>
+                <option>Mesin Rumput & chaiNsaw Gudang</option>
+
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>KM awal:</label>
+              <input type="number" id="kmAwal" name="KM awal">
+            </div>
+          </div>
+
+          <div class="form-column">
+            <div class="form-group">
+              <label>KM akhir:</label>
+              <input type="number" id="kmAkhir" name="KM akhir">
+            </div>
+
+            <div class="form-group">
+              <label>Real perjalanan:</label>
+              <input type="number" id="realPerjalanan" name="Real perjalanan" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>Rasio BBM (L):</label>
+              <input type="number" id="rasioBBM" name="Rasio BBM (L)" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>QTY (L):</label>
+              <input type="number" name="QTY (L)">
+            </div>
+
+            <div class="form-group">
+              <label for="createReservation">Create Reservation:</label>
+              <input type="text" id="createReservation" name="Create reservation" placeholder="Nama Pembuat Reservasi" />
+            </div>
+
+            <div class="form-group">
+              <label>Rasio BBM terinput:</label>
+              <input type="number" name="Rasio BBM terinput">
+            </div>
+
+            <div class="form-group">
+              <label>Tempat Pengisian:</label>
+              <select name="Tempat Pengisian" required>
+                <option value="">Tempat Pengisian </option>
+                <option>SPBI-KAS</option>
+                <option>SPBI-KTT</option>
+                <option>SPBI-Tempino</option>
+                <option>SPBI-Bajubang</option>
+                <option>SPBU-Umum</option>
+              </select>
+            </div>
+
+            <div class="foto-wrapper">
+
+              <!-- FOTO KM (KIRI) -->
+              <div class="form-group foto-km">
+                <label>📷 Upload / Paste Foto KM (saat Submit):</label>
+
+                <input type="file" id="updatePhotoKM" accept="image/*">
+
+                <input type="text" id="linkPhotoKM" placeholder="Link foto KM (Drive atau lainnya)" style="margin-top:8px;">
+
+                <small style="color:gray;">
+                  Bisa upload file / paste link / Ctrl+V hasil copy
+                </small>
+
+                <div id="previewKMContainer" style="display:none;margin-top:10px;">
+                  <img id="previewKM" style="max-width:120px;border-radius:8px;">
+                </div>
+              </div>
+
+              <!-- FOTO BUKTI (KANAN) -->
+              <div class="form-group">
+                <label>📷 Upload / Paste Foto Bukti (saat Update):</label>
+
+                <input type="file" id="updatePhotoBukti" accept="image/*">
+
+                <input type="text" id="linkPhotoBukti" placeholder="Link foto Bukti (Drive atau lainnya)" style="margin-top:8px;">
+
+                <small style="color:gray;">
+                  Bisa upload file / paste link / Ctrl+V hasil copy
+                </small>
+
+                <div id="previewBuktiContainer" style="display:none;margin-top:10px;">
+                  <img id="previewBukti" style="max-width:120px;border-radius:8px;">
+                </div>
+              </div>
+
+            </div>
+            <div class="submit-container">
+              <button type="submit" id="submitBtn">🚀 Submit</button>
+              <button type="button" id="editBtn">✏️ Edit</button>
+              <button type="button" id="updateBtn">🔄 Update</button>
+            </div>
+          </div>
+        </form>
+        <p id="status"></p>
+      </div>
+      <div id="loading" style="display:none;" class="loading-overlay">
+        Loading...
+      </div>
+
+      <!-- ========== REPORT DATA ========== -->
+      <div id="reportSection" class="card main-content hidden">
+        <h2>Report Data BBM</h2>
+        <div class="action-buttons">
+          <button onclick="loadReport()">🔄 Refresh Data</button>
+          <button onclick="downloadTableAsExcel('reportTable', 'Report_BBM')">⬇️ Download Excel</button>
+        </div>
+
+        <!-- Filter Pencarian -->
+        <div class="filter-container">
+          <label>Dari:</label>
+          <input type="date" id="filterDateFrom">
+
+          <label>Sampai:</label>
+          <input type="date" id="filterDateTo">
+
+          <input type="text" id="filterNopol" placeholder="Cari KRP Nopol">
+          <input type="text" id="filterDriver" placeholder="Cari Nama Driver">
+
+          <button onclick="applyFilter()">🔍 Filter</button>
+          <button onclick="resetFilter()">♻️ Reset</button>
+        </div>
+
+        <!-- Header tetap -->
+        <div class="table-header">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Fungsi</th>
+                <th>WKP</th>
+                <th>Discription</th>
+                <th>Driver</th>
+                <th>KRP-Nopol</th>
+                <th>KM awal</th>
+                <th>KM akhir</th>
+                <th>Real perjalanan</th>
+                <th>Rasio BBM (L)</th>
+                <th>QTY (L)</th>
+                <th>Create reservation</th>
+                <th>Rasio BBM terinput</th>
+                <th>Jam submit</th>
+                <th>Jam update</th>
+                <th>Tempat Pengisian</th>
+                <th>Foto KM</th>
+                <th>Foto Bukti</th> <!-- 🆕 kolom baru -->
+              </tr>
+            </thead>
+          </table>
+        </div>
+
+        <!-- Isi tabel bisa di-scroll -->
+        <div class="table-body">
+          <table id="reportTable" class="report-table">
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- === SECTION REPORT BBM PER KENDARAAN === -->
+      <div id="vehicleReportSection" class="card main-content hidden">
+        <h2>📊 Report BBM per Kendaraan</h2>
+
+        <!-- 🔹 Filter tanggal dan tombol aksi -->
+        <div class="action-buttons">
+          <label>
+            Dari:
+            <input type="date" id="vehicleStartDate">
+          </label>
+          <label>
+            Sampai:
+            <input type="date" id="vehicleEndDate">
+          </label>
+          <button onclick="loadVehicleReport()">🔄 Refresh Data</button>
+          <button onclick="downloadTableAsExcel('vehicleReportTable', 'Report_BBM_Per_Kendaraan')">⬇️ Download Excel</button>
+        </div>
+
+        <!-- 🔹 Header tabel tetap -->
+        <div class="table-header">
+          <table class="report-table" style="width:100%; border-collapse:collapse;">
+            <thead>
+              <tr id="vehicleReportHeader">
+                <th>Kendaraan</th>
+                <th>Tanggal</th>
+                <th>Total (L)</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+
+        <!-- 🔹 Isi tabel bisa di-scroll -->
+        <div class="table-body" style="max-height:70vh; overflow-y:auto; overflow-x:auto;">
+          <table id="vehicleReportTable" class="report-table" border="1" cellspacing="0" cellpadding="6" style="width:100%; border-collapse:collapse;">
+            <tbody id="vehicleReportBody">
+              <tr>
+                <td colspan="3">Memuat data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- === SECTION REPORT BBM PER DRIVER === -->
+      <div id="driverReportSection" class="card main-content hidden">
+        <h2>Report BBM per Driver</h2>
+
+        <div class="filter-section">
+          <label for="filterMonth">Pilih Bulan:</label>
+          <input type="month" id="filterMonth" onchange="loadDriverReport()">
+        </div>
+
+        <div class="action-buttons">
+          <button onclick="loadDriverReport()">🔄 Refresh Data</button>
+          <button onclick="downloadTableAsExcel('driverReportBody', 'Report_BBM_Per_Driver')">⬇️ Download Excel</button>
+        </div>
+
+        <!-- Header tetap -->
+        <div class="table-header">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Nama Driver</th>
+                <th>Tanggal</th>
+                <th>KRP Nopol</th>
+                <th>Total (L)</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+
+        <!-- Body scroll -->
+        <div class="table-body">
+          <table id="driverReportTable" class="report-table">
+            <tbody id="driverReportBody">
+              <tr>
+                <td colspan="3">Memuat data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="bbmTrendSection" class="card main-content hidden">
+        <h2>📈 Tren Kenaikan / Penurunan BBM per KRP Nopol</h2>
+        <div class="action-buttons">
+          <button onclick="loadBBMTrend()">🔄 Refresh Data</button>
+          <button onclick="downloadTableAsExcel('bbmTrendTable', 'Tren_BBM')">⬇️ Download Excel</button>
+        </div>
+
+        <div class="table-container">
+          <div class="table-header">
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Kendaraan (KRP/Nopol)</th>
+                  <th>Nama Driver</th>
+                  <th>Tanggal</th>
+                  <th>Jumlah BBM (L)</th>
+                  <th>KM Awal</th>
+                  <th>KM Akhir</th>
+                  <th>% Perubahan</th>
+                  <th>Status</th>
+                  <th>Efisiensi (L/km)</th>
+                  <th>Catatan / Anomali</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div class="table-body">
+            <table class="report-table" id="bbmTrendTable">
+              <tbody>
+                <tr>
+                  <td colspan="6">Belum ada data</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- === SECTION REPORT BBM ABNORMAL === -->
+      <div id="bbmAbnormalSection" class="card main-content hidden">
+        <h2>⚠️ Report BBM Abnormal (Rasio < 10)</h2>
+            <div class="action-buttons">
+              <button onclick="loadBBMAbnormal()">🔄 Refresh Data</button>
+              <button onclick="downloadTableAsExcel('bbmAbnormalTable', 'Report_BBM_Abnormal')">⬇️ Download Excel</button>
+            </div>
+
+            <div class="table-container">
+              <div class="table-header">
+                <table class="report-table">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Date</th>
+                      <th>Fungsi</th>
+                      <th>WKP</th>
+                      <th>Discription</th>
+                      <th>Driver</th>
+                      <th>KRP-Nopol</th>
+                      <th>KM awal</th>
+                      <th>KM akhir</th>
+                      <th>Real perjalanan</th>
+                      <th>QTY (L)</th>
+                      <th>Create reservation</th>
+                      <th>Rasio BBM terinput</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <div class="table-body">
+                <table class="report-table" id="bbmAbnormalTable">
+                  <tbody>
+                    <tr>
+                      <td colspan="13">Belum ada data</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+      </div>
+
+      <!-- === REPORT GRAFIK PER KENDARAAN === -->
+      <div id="vehicleChartSection" class="card main-content hidden">
+        <h2>📊 Grafik BBM per Kendaraan (EMA & ATR)</h2>
+
+        <div class="action-buttons">
+          <select id="vehicleSelect">
+            <option value="">-- Pilih KRP / Nopol --</option>
+          </select>
+          <button onclick="loadVehicleChart()">🔄 Tampilkan Grafik</button>
+          <button onclick="downloadVehicleChartExcel()">⬇️ Download Excel</button>
+          <button onclick="downloadVehicleChart()">🖼️ Download PNG</button> <!-- ✅ Tambahan -->
+        </div>
+
+        <canvas id="vehicleChartCanvas" height="120"></canvas>
+      </div>
+
+      <!-- === REPORT GRAFIK PER DRIVER === -->
+      <div id="driverChartSection" class="card main-content hidden">
+        <h2>📊 Grafik BBM per Driver (EMA & ATR)</h2>
+
+        <div class="action-buttons">
+          <select id="driverSelect">
+            <option value="">-- Pilih Nama Driver --</option>
+          </select>
+          <button onclick="loadDriverChart()">🔄 Tampilkan Grafik</button>
+          <button onclick="downloadDriverChartExcel()">⬇️ Download Excel</button>
+          <button onclick="downloadDriverChartPNG()">🖼️ Download PNG</button>
+        </div>
+
+        <canvas id="driverChartCanvas" height="120"></canvas>
+      </div>
+
+      <div id="dashboardBBMSection" class="main-content hidden scrollable-dashboard">
+        <h2 class="dashboard-title">Dashboard Konsumsi BBM</h2>
+
+        <!-- 🔽 Pilihan Bulan -->
+        <div class="month-filter">
+          <label for="monthSelector">Pilih Bulan:</label>
+          <select id="monthSelector" onchange="updateDashboardByMonth()">
+            <option value="all">Semua Bulan</option>
+          </select>
+        </div>
+
+        <!-- 🔹 Rekap Tempat Pengisian -->
+        <section class="tempat-section">
+          <h3 class="section-title center-title">Rekap BBM per Tempat Pengisian</h3>
+          <div id="tempatPengisianContainer" class="tempat-grid"></div>
+        </section>
+
+        <!-- 🔹 Ringkasan per Fungsi -->
+        <section class="fungsi-section">
+          <h3 class="section-title center-title">Ringkasan Konsumsi per Fungsi</h3>
+          <div id="fungsiSummary" class="summary-container"></div>
+        </section>
+
+        <!-- 🔹 Grafik -->
+        <section class="chart-section">
+          <h3 class="section-title center-title">Grafik Konsumsi BBM</h3>
+          <div class="chart-grid">
+            <div class="chart-container full-width">
+              <canvas id="chartBBMTrend"></canvas>
+            </div>
+            <div class="chart-container">
+              <canvas id="chartBBMWeekly"></canvas>
+            </div>
+            <div class="chart-container">
+              <canvas id="chartBBMMonthly"></canvas>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ========================= REAL PERJALANAN REPORT ========================= -->
+      <div id="realPerjalananReportSection" class="card main-content hidden">
+        <h2>🚗 Report Total Real Perjalanan per Bulan</h2>
+
+        <div class="action-buttons">
+          <label>Dari:
+            <input type="date" id="dateFrom">
+          </label>
+
+          <label>Sampai:
+            <input type="date" id="dateTo">
+          </label>
+
+          <button onclick="loadRealPerjalananReport()">🔍 Tampilkan</button>
+
+          <button onclick="downloadTableAsExcel('realPerjalananTable', 'Real_Perjalanan_Range_Tanggal')">
+            ⬇️ Download Excel
+          </button>
+        </div>
+
+        <div class="table-header">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Nopol</th>
+                <th>Total KM</th>
+                <th>Sisa KM</th>
+                <th>Estimasi Servis</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+
+        <div class="table-body">
+          <table id="realPerjalananTable" class="report-table">
+            <tbody>
+              <tr>
+                <td colspan="5">Memuat data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ========================= JOB REPORT VTS ========================= -->
+      <div id="jobReportVTSSection" class="card main-content hidden">
+        <h2>🛠️ Job Report VTS</h2>
+
+        <div class="action-buttons">
+          <button onclick="loadJobReportVTS()">🔄 Refresh Data</button>
+
+          <button onclick="downloadTableAsExcel('jobReportVTSTable', 'Job_Report_VTS')">
+            ⬇️ Download Excel
+          </button>
+
+          <!-- SEARCH VEHICLE ID -->
+          <input type="text" id="searchVehicleId" placeholder="🔍 Cari Vehicle ID..." onkeyup="applyJobReportFilter()" style="padding:6px;" />
+
+          <button onclick="resetJobReportFilter()">❌ Reset</button>
+        </div>
+
+        <!-- WRAPPER SCROLL -->
+        <div class="table-wrapper">
+          <table id="jobReportVTSTable" class="report-table">
+            <thead>
+              <tr>
+                <th>Job Number</th>
+                <th>Tanggal</th>
+                <th>User name</th>
+                <th>working type</th>
+                <th>installation type</th>
+                <th>Merk kendaraan</th>
+                <th>Vehicle type</th>
+                <th>Lisence plate</th>
+                <th>Vehicle id</th>
+                <th>Department</th>
+                <th>Colour</th>
+                <th>Location</th>
+                <th>GPS Serial No</th>
+                <th>GPS Unit ID</th>
+                <th>GSM</th>
+                <th>Distance</th>
+                <th>GPS Unit Module</th>
+                <th>RFID Reader</th>
+                <th>Buzzer</th>
+                <th>Stater interrupter</th>
+                <th>Fuel stick</th>
+                <th>Mesin</th>
+                <th>Panel Dasbord</th>
+                <th>Klakson</th>
+                <th>Audio</th>
+                <th>Sistem listrik</th>
+                <th>AC</th>
+                <th>Power windows</th>
+                <th>Panel Instrument</th>
+                <th>Spion</th>
+                <th>Deskripsi Pekerjaan</th>
+                <th>Progres Status</th>
+                <th>Upload Foto Bukti</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td colspan="33">Menunggu data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="distanceMeasureSection" class="card main-content">
+        <h2> Pengukuran Jarak basis Leatflet </h2>
+
+        <div class="action-buttons">
+          <input type="text" id="cityInput" placeholder="Masukkan kota (misal: Palembang,Jambi)" style="padding:6px 10px; border-radius:6px; width:250px;">
+          <button onclick="searchCities()">🔍 Cari Kota</button>
+          <button onclick="resetMapDistance()">🔄 Reset</button>
+        </div>
+
+        <p>cari kota untuk menghitung jarak otomatis mengikuti jalan.</p>
+        <div id="leafletMap"></div>
+        <p id="leafletDistanceResult"></p>
+      </div>
+
+      <!-- ========================= SURAT PERNYATAAN BBM ========================= -->
+      <div id="bbmStatementSection" class="card main-content hidden">
+
+        <h2>📄 Surat Pernyataan Penambahan BBM</h2>
+
+        <!-- ================= AREA SURAT ================= -->
+        <div id="previewSurat" class="surat-preview" contenteditable="true">
+
+          <div class="kop-surat" style="width: 100%; margin: 0;">
+            <table class="kop-table" style="width: 100%; table-layout: fixed; border-collapse: collapse;">
+              <tr>
+                <td class="kop-logo-cell" style="width: 16%; text-align: center; padding: 0;">
+                  <img src="https://i.postimg.cc/4x6Y6Wc4/Devimandiri.jpg" alt="Logo" style="width: 120px; height: auto;">
+                </td>
+
+                <td class="kop-text-cell" style="width: 84%; padding-left: 25px;">
+                  <div class="instansi" style="text-transform: uppercase; color: #007BFF; font-size: 40px; font-weight: 900; letter-spacing: 3px; line-height: 1.05;">
+                    PT. DEVI MANDIRI
+                  </div>
+
+                  <div class="sub-instansi" style="color: #007BFF; font-weight: bold; font-size: 15px;">
+                    GENERAL CONTRACTOR & SUPPLIER
+                  </div>
+
+                  <div class="alamat" style="font-weight: bold; color: #000; font-size: 14px;">
+                    Jl. Prof. DR. Moh. Yamin Kel No.27, Lb. Bandung, Kec. Jelutung<br>
+                    Kota Jambi, Jambi 36135<br>
+                    <strong>Telp:</strong>
+                    <span>(0741) 5911555</span> |
+                    <span>Korlap Field Jambi: +62 813-6641-4644</span> |
+                    <span>HSE DM Field Jambi: +62 813-6888-0205</span> |
+                    <span>Dispatcher: +62 811-7481-338</span>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <hr class="garis-surat">
+
+          <h3 class="judul-surat">SURAT PERNYATAAN PENAMBAHAN BBM</h3>
+
+          <p class="nomor">
+            Nomor: <span id="nomorSurat">...</span>
+          </p>
+
+          <p><strong>Yang bertanda tangan di bawah ini:</strong></p>
+
+          <table class="tabel-surat">
+            <tr>
+              <td>Nama Driver</td>
+              <td>: __________________</td>
+            </tr>
+            <tr>
+              <td>Plat Kendaraan</td>
+              <td>: __________________</td>
+            </tr>
+            <tr>
+              <td>Jumlah BBM</td>
+              <td>: __________________ Liter</td>
+            </tr>
+            <tr>
+              <td>Tanggal</td>
+              <td>: __________________</td>
+            </tr>
+          </table>
+
+          <p>
+            Dengan ini menyatakan bahwa telah dilakukan penambahan
+            Bahan Bakar Minyak (BBM) pada kendaraan tersebut di atas.
+          </p>
+
+          <p><strong>Alasan Penambahan BBM:</strong></p>
+
+          <p class="alasan">
+            "________________________________________"
+            yang mengakibatkan terganggunya operasional di tempat alokasi kendaraan tersebut.
+            Untuk itu saya dan tim akan melakukan investigasi terhadap kendaraan tersebut.
+            Setelah hasil investigasi diperoleh, maka saya akan menerbitkan laporan hasil investigasi
+            terhadap kendaraan tersebut.
+          </p>
+
+          <p>
+            Dengan ini saya menyatakan bahwa penambahan BBM ini dilakukan secara sadar,
+            benar, dan dapat dipertanggungjawabkan sepenuhnya sesuai ketentuan perusahaan.
+          </p>
+
+          <p>Demikian surat pernyataan ini dibuat dengan sebenar-benarnya.</p>
+
+          <p class="tanggal-surat">Jambi, __________________</p>
+
+          <div class="ttd" style="display: flex; justify-content: space-between; margin-top: 40px;">
+            <div style="text-align: center; width: 45%;">
+              <p>Yang Membuat Pernyataan,</p>
+              <br><br><br>
+              <p>( <span id="makerName" contenteditable="true">__________________</span> )</p>
+            </div>
+
+            <div style="text-align: center; width: 45%;">
+              <p>Driver,</p>
+              <br><br><br>
+              <p>( __________________ )</p>
+            </div>
+          </div>
+
+        </div>
+        <!-- ================= AKHIR SURAT ================= -->
+
+        <!-- ================= ARSIP REPORT ================= -->
+        <div id="bbmReportBox" style="margin-top:20px; border:2px solid #007BFF; padding:12px;">
+          <h3>📄 Arsip Report Surat BBM</h3>
+
+          <table id="bbmReportTable" border="1" style="width:100%; border-collapse:collapse;">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nomor Surat</th>
+                <th>Nama Driver</th>
+                <th>Pembuat Pernyataan</th>
+                <th>Tanggal</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <!-- ================= TOMBOL ================= -->
+        <div style="margin-top:12px;">
+          <button onclick="resetBBMSurat()">🔄 Reset Surat</button>
+          <button onclick="saveToGoogleDocs()">☁ Simpan ke Google Docs</button>
+          <button onclick="downloadSuratBBM()">⬇ Download Surat (PDF)</button>
+          <button onclick="loadHistoryReport()">📜 History Report</button>
+        </div>
+
+      </div>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+      <script src="js/realtime.js"></script>
+
+      <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+      <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+      <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+      <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+      <script src="script.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+      <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <footer>
+        &copy; 2025 (EMD)GS.Dispatcher@djambi. All rights reserved.
+      </footer>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+      <script>
+        Chart.register(ChartDataLabels);
+      </script>
+
+</body>
+
+</html>
+    <script  src="./script.js"></script>
+
+  </body>
+  
+</html>
