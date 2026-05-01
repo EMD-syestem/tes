@@ -846,7 +846,9 @@ let updatedPhotoLink = "";
 document.getElementById("myForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  // cek FOTO KM wajib ada
+  // ============================
+  // VALIDASI FOTO KM WAJIB ADA
+  // ============================
   const previewKM = document.getElementById("previewKM");
   const hasPhotoKM =
     submitPhotoKMBase64 ||
@@ -858,6 +860,45 @@ document.getElementById("myForm").addEventListener("submit", async (e) => {
     return;
   }
 
+  // ============================
+  // VALIDASI DUPLIKAT
+  // KRP-Nopol + KM awal
+  // ============================
+  const krpNopol =
+    document.querySelector('[name="KRP-Nopol"]')?.value?.trim() || "";
+
+  const kmAwal =
+    document.querySelector('[name="KM awal"]')?.value?.trim() || "";
+
+  if (!krpNopol || !kmAwal) {
+    alert("⚠️ KRP-Nopol dan KM awal wajib diisi!");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${scriptURL}?action=getalldata`);
+    const rows = await res.json();
+
+    const duplicate = Array.isArray(rows) && rows.some(row =>
+      String(row["KRP-Nopol"] || "").trim() === krpNopol &&
+      String(row["KM awal"] || "").trim() === kmAwal
+    );
+
+    if (duplicate) {
+      alert(
+        `❌ Gagal submit!\nKRP-Nopol "${krpNopol}" dengan KM awal "${kmAwal}" sudah ada.`
+      );
+      return;
+    }
+
+  } catch (err) {
+    alert("❌ Validasi duplicate gagal: " + err.message);
+    return;
+  }
+
+  // ============================
+  // BUAT FORMDATA
+  // ============================
   let formData = new FormData(e.target);
   formData.set("action", "submit");
 
@@ -866,7 +907,9 @@ document.getElementById("myForm").addEventListener("submit", async (e) => {
   formData.set("Jam submit", now.toLocaleString("id-ID", { hour12: false }));
   formData.set("Jam update", "");
 
-  // kirim Foto KM
+  // ============================
+  // KIRIM FOTO KM
+  // ============================
   if (submitPhotoKMLink) {
     formData.set("Foto KM", submitPhotoKMLink);
   } else if (submitPhotoKMBase64) {
@@ -875,7 +918,9 @@ document.getElementById("myForm").addEventListener("submit", async (e) => {
     formData.set("Foto KM", previewKM.src);
   }
 
-  // Foto Bukti optional
+  // ============================
+  // KIRIM FOTO BUKTI (OPTIONAL)
+  // ============================
   if (submitPhotoBuktiLink) {
     formData.set("Foto Bukti", submitPhotoBuktiLink);
   } else if (submitPhotoBuktiBase64) {
