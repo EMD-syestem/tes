@@ -827,6 +827,19 @@ document
     reader.readAsDataURL(file);
   });
 
+// GLOBAL FOTO
+let submitPhotoKMBase64 = "";
+let submitPhotoKMLink = "";
+
+let submitPhotoBuktiBase64 = "";
+let submitPhotoBuktiLink = "";
+
+let updatedPhotoKMBase64 = "";
+let updatedPhotoKMLink = "";
+
+let updatedPhotoBase64 = "";
+let updatedPhotoLink = "";
+
 // ==============================
 // SUBMIT DATA BARU
 // ==============================
@@ -936,12 +949,6 @@ document.getElementById("editBtn").addEventListener("click", () => {
 });
 
 // === 🆕 Upload / Paste Foto Saat UPDATE Data ===
-let updatedPhotoKMBase64 = "";
-let updatedPhotoKMLink = "";
-
-let updatedPhotoBase64 = "";
-let updatedPhotoLink = "";
-
 document.addEventListener("DOMContentLoaded", function () {
   const inputKM = document.getElementById("updatePhotoKM");
   const inputBukti = document.getElementById("updatePhotoBukti");
