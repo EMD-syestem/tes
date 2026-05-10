@@ -1339,8 +1339,117 @@ main:hover,
   pointer-events: none;
 }
 
+/* card user lain tetap tidak bisa diklik */
+.online-user.disabled{
+    pointer-events:none;
+}
+
+/* tombol call tetap aktif */
+.online-user.disabled .online-actions,
+.online-user.disabled .call-btn,
+.online-user.disabled .online-actions *{
+    pointer-events:auto !important;
+}
+
 .online-user.clickable {
   cursor: pointer;
+}
+
+.online-actions{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-left:auto;
+}
+
+.call-btn{
+  border:none;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:13px;
+  color:white;
+  transition:.2s;
+}
+
+.call-btn:hover{
+  transform:scale(1.08);
+}
+
+.voice{
+  background:#16a34a;
+}
+
+.video{
+  background:#2563eb;
+}
+
+.meeting{
+  background:#7c3aed;
+}
+.incoming-popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+}
+
+.hidden{
+  display:none;
+}
+
+.call-box{
+  width:340px;
+  background:white;
+  border-radius:20px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+  animation:popCall .25s ease;
+}
+
+.call-avatar{
+  font-size:60px;
+  margin-bottom:10px;
+}
+
+.call-buttons{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+
+.call-buttons button{
+  flex:1;
+  border:none;
+  padding:14px;
+  border-radius:12px;
+  color:white;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.accept-call{
+  background:#16a34a;
+}
+
+.reject-call{
+  background:#dc2626;
+}
+
+@keyframes popCall{
+  from{
+    transform:scale(.8);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
 }
 /* ====================================================
    GRID
@@ -1623,105 +1732,102 @@ input[type="checkbox"] {
   padding: 30px;
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  animation: fadeIn 0.5s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,.05);
   margin: 0 auto;
-  max-width: 96%; /* ✅ Biar lebar, tapi tetap ada margin kiri-kanan */
+  max-width: 96%;
 }
 
-/* === TABEL TANPA SCROLL === */
-#reportTable.full-width {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-  table-layout: fixed; /* ✅ Membuat kolom lebar merata dan responsif */
+/* WRAPPER */
+.table-wrapper{
+  width:100%;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
+  border:1px solid #dbe7ff;
+  background:white;
 }
 
-/* HEADER TABEL */
-#reportTable thead th {
-  background-color: #0078ff;
-  color: white;
-  padding: 12px;
-  text-align: center;
-  font-weight: 600;
-  border: none;
+/* HEADER */
+.table-header{
+  overflow:hidden;
 }
 
-/* BODY TABEL */
-#reportTable tbody td {
-  padding: 10px 12px;
-  text-align: center;
-  border-bottom: 1px solid #e6e6e6;
-  word-wrap: break-word; /* ✅ Agar teks panjang tidak keluar */
+.table-header table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
 }
 
-/* GANTI BACKGROUND BARIS GENAP */
-#reportTable tbody tr:nth-child(even) {
-  background-color: #f9faff;
+/* BODY */
+.table-body{
+  max-height:550px;   /* tinggi area scroll */
+  overflow-y:auto;
+  overflow-x:hidden;
 }
 
-/* HOVER EFEK */
-#reportTable tbody tr:hover {
-  background-color: #e6f2ff;
-  cursor: pointer;
+.table-body table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
 }
 
-/* FOTO BUKTI */
-#reportTable tbody td img {
-  width: 60px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 5px;
-  border: 2px solid #ddd;
+/* Samakan style kolom */
+#reportHeader th,
+#reportTable td{
+  padding:14px 10px;
+  text-align:center;
+  vertical-align:middle;
+  word-break:break-word;
+  box-sizing:border-box;
 }
 
-/* TOMBOL */
-.btn {
-  padding: 8px 15px;
-  border-radius: 6px;
-  background: #0275d8;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-.btn:hover {
-  opacity: 0.9;
+/* HEADER STYLE */
+#reportHeader th{
+  background:linear-gradient(135deg,#1d4ed8,#2563eb);
+  color:white;
+  font-weight:700;
+  border-right:1px solid rgba(255,255,255,.25);
+  position:sticky;
+  top:0;
+  z-index:5;
 }
 
-/* ANIMASI */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* BODY */
+#reportTable td{
+  border-bottom:1px solid #e5e7eb;
+  color:#1e3a8a;
+  background:#fff;
 }
 
-/* RESPONSIF (MOBILE) */
-@media (max-width: 768px) {
-  #reportTable thead {
-    display: none;
-  }
+#reportTable tr:nth-child(even) td{
+  background:#f8fbff;
+}
 
-  #reportTable tbody td {
-    display: block;
-    text-align: right;
-    padding-left: 50%;
-    position: relative;
-  }
+#reportTable tr:hover td{
+  background:#eef6ff;
+}
 
-  #reportTable tbody td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 10px;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #333;
-    white-space: nowrap;
-  }
+/* FOTO */
+#reportTable img{
+  width:65px;
+  height:50px;
+  object-fit:cover;
+  border-radius:8px;
+  border:2px solid #dbeafe;
+}
+
+/* SCROLLBAR */
+.table-body::-webkit-scrollbar{
+  width:10px;
+}
+
+.table-body::-webkit-scrollbar-track{
+  background:#edf4ff;
+}
+
+.table-body::-webkit-scrollbar-thumb{
+  background:#60a5fa;
+  border-radius:20px;
 }
 .report-section .btn {
   float: right; /* Memposisikan tombol ke sebelah kanan */
@@ -3273,4 +3379,162 @@ grid-template-columns: repeat(4, 1fr);
   #chartMaintenance{
     height:280px !important;
   }
+}
+
+.btn-refresh{
+  background: linear-gradient(135deg,#16a34a,#15803d);
+  color:white;
+  border:none;
+  padding:10px 18px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:700;
+  box-shadow:0 4px 10px rgba(0,0,0,.15);
+  transition:.2s;
+}
+
+.btn-refresh:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 16px rgba(0,0,0,.2);
+}
+
+.btn-refresh:active{
+  transform:scale(.97);
+}
+/* WRAPPER */
+.monitoring-wrapper{
+  width:100%;
+  overflow:hidden;
+  border-radius:12px;
+  border:1px solid #dbe4f0;
+  background:#fff;
+}
+
+/* HEADER */
+.monitoring-header{
+  overflow:hidden;
+  width:100%;
+  border-bottom:1px solid #dbe4f0;
+}
+
+/* BODY */
+.monitoring-body{
+  max-height:500px;
+  overflow:auto;
+  width:100%;
+}
+
+/* TABLE */
+.monitoring-table{
+  width:2200px;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+
+/* HEADER + BODY */
+.monitoring-table th,
+.monitoring-table td{
+  width:120px;
+  min-width:120px;
+  max-width:120px;
+  padding:12px 10px;
+  text-align:center;
+  vertical-align:middle;
+  word-break:break-word;
+  box-sizing:border-box;
+}
+
+/* kolom pertama */
+.monitoring-table th:first-child,
+.monitoring-table td:first-child{
+  width:60px;
+  min-width:60px;
+  max-width:60px;
+}
+
+/* HEADER */
+.monitoring-table th{
+  background:#2f56cc;
+  color:white;
+  font-weight:700;
+  position:sticky;
+  top:0;
+  z-index:5;
+}
+
+/* BODY */
+.monitoring-table td{
+  border-bottom:1px solid #dbe4f0;
+  border-right:1px solid #dbe4f0;
+  background:white;
+}
+
+.monitoring-table tbody tr:nth-child(even) td{
+  background:#f8fbff;
+}
+
+.monitoring-table tbody tr:hover td{
+  background:#edf5ff;
+}
+/* ================= SETTING ================= */
+.setting-wrapper{
+    position:absolute;
+    top:12px;
+    right:130px;
+    z-index:1000;
+}
+
+/* gear polos */
+.setting-btn{
+    font-size:24px;
+    cursor:pointer;
+    user-select:none;
+    transition:.3s;
+    line-height:1;
+}
+
+.setting-btn:hover{
+    transform:rotate(90deg) scale(1.1);
+}
+
+/* dropdown */
+.setting-menu{
+    display:none;
+    position:absolute;
+    top:45px;
+    right:0;
+    width:240px;
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.18);
+}
+
+.setting-menu.show{
+    display:block;
+}
+
+.setting-menu h4{
+    margin:0 0 15px;
+}
+
+.upload-wallpaper{
+    display:block;
+    background:#2f56cc;
+    color:white;
+    padding:12px;
+    border-radius:10px;
+    text-align:center;
+    cursor:pointer;
+    margin-bottom:12px;
+}
+
+.reset-wallpaper{
+    width:100%;
+    border:none;
+    padding:12px;
+    border-radius:10px;
+    cursor:pointer;
+    background:#e53935;
+    color:white;
 }
