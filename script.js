@@ -1,6 +1,6 @@
 /// ===================== LOGIN SECTION (GOOGLE SHEET) =====================
 const SHEET_API =
-  "https://script.google.com/macros/s/AKfycbyi4bRXw8q-9ggnvPNr89HrhYTGfU4YdioAD5HTr0NwNbM0f8PktjQWecyQQt-9xl90Sg/exec";
+  "https://script.google.com/macros/s/AKfycbzYHpKZ9DH05HlRDVuZe-p7sBHG3wQI7CtIuepHm4ARRpFD-RqPi1rB3a3TDf_OeJ3Vsw/exec";
 
 let users = [];
 let onlineInterval = null;
@@ -106,8 +106,47 @@ async function loadOnlineUsers() {
 
           </div>
 
-          <div class="online-dot"></div>
+          <div class="online-actions">
+
+            ${
+              !isMe
+                ? `
+                <button
+                  class="call-btn voice"
+                  onclick="event.stopPropagation(); callUser('${user.Email}','voice')"
+                  title="Voice Call"
+                >
+                  📞
+                </button>
+
+                <button
+                  class="call-btn video"
+                  onclick="event.stopPropagation(); callUser('${user.Email}','video')"
+                  title="Video Call"
+                >
+                  🎥
+                </button>
+
+                <button
+                  class="call-btn meeting"
+                  onclick="event.stopPropagation(); inviteMeeting('${user.Email}')"
+                  title="Meeting"
+                >
+                  👥
+                </button>
+              `
+                : ""
+            }
+
+            <div class="online-dot"></div>
+
+          </div>
+
         </div>
+
+        <div id="chat-${user.Email}" class="inline-chat hidden"></div>
+
+      </div>
 
         <div id="chat-${user.Email}" class="inline-chat hidden"></div>
 
@@ -173,8 +212,47 @@ if (openedChatEmail) {
 
               </div>
 
-              <div class="online-dot"></div>
-            </div>
+              <div class="online-actions">
+
+            ${
+              !isMe
+                ? `
+                <button
+                  class="call-btn voice"
+                  onclick="event.stopPropagation(); callUser('${user.Email}','voice')"
+                  title="Voice Call"
+                >
+                  📞
+                </button>
+
+                <button
+                  class="call-btn video"
+                  onclick="event.stopPropagation(); callUser('${user.Email}','video')"
+                  title="Video Call"
+                >
+                  🎥
+                </button>
+
+                <button
+                  class="call-btn meeting"
+                  onclick="event.stopPropagation(); inviteMeeting('${user.Email}')"
+                  title="Meeting"
+                >
+                  👥
+                </button>
+              `
+                : ""
+            }
+
+            <div class="online-dot"></div>
+
+          </div>
+
+        </div>
+
+        <div id="chat-${user.Email}" class="inline-chat hidden"></div>
+
+      </div>
 
             <div id="chat-${user.Email}" class="inline-chat hidden"></div>
 
@@ -396,6 +474,85 @@ function renderChat(data) {
     .join("");
 
   chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function callUser(email, type = "voice") {
+  const room = "VTS-" + Date.now();
+  const me = (localStorage.getItem("currentUser") || "")
+    .trim()
+    .toLowerCase();
+
+  console.log("NELPON:", me, "=>", email);
+
+  const script = document.createElement("script");
+
+  script.src =
+    `${SHEET_API}?type=sendCall` +
+    `&from=${encodeURIComponent(me)}` +
+    `&to=${encodeURIComponent(email)}` +
+    `&callType=${encodeURIComponent(type)}` +
+    `&room=${encodeURIComponent(room)}` +
+    `&conference=no` +
+    `&callback=callCallback` +
+    `&t=${Date.now()}`;
+
+  window.callCallback = function(res) {
+    console.log("CALL RESULT:", res);
+
+    if (res.success) {
+      const isVoice = type === "voice";
+
+      const url =
+        `https://meet.jit.si/${room}` +
+        `#userInfo.displayName="${encodeURIComponent(me)}"` +
+        `&config.startWithAudioMuted=false` +
+        `&config.startWithVideoMuted=${isVoice ? "true" : "false"}`;
+
+      window.open(url, "_blank");
+    }
+  };
+
+  document.body.appendChild(script);
+}
+let incomingChecker = null;
+
+function startIncomingCallListener() {
+  if (incomingChecker) clearInterval(incomingChecker);
+
+  incomingChecker = setInterval(() => {
+    const me = (
+      localStorage.getItem("currentUser") || ""
+    ).trim().toLowerCase();
+
+    if (!me) return;
+
+    window.checkCallCallback = function(res) {
+      if (!res) return;
+      if (!res.status) return;
+
+      if (res.status === "ringing") {
+        showIncomingCall(
+          res.from,
+          res.callType,
+          res.room
+        );
+      }
+    };
+
+    const old = document.getElementById("checkCallScript");
+    if (old) old.remove();
+
+    const script = document.createElement("script");
+    script.id = "checkCallScript";
+    script.src =
+      `${SHEET_API}?type=checkCall` +
+      `&email=${encodeURIComponent(me)}` +
+      `&callback=checkCallCallback` +
+      `&t=${Date.now()}`;
+
+    document.body.appendChild(script);
+
+  }, 2000);
 }
 // ===================== SHOW DASHBOARD =====================
 async function showDashboard(user) {
@@ -1762,7 +1919,7 @@ function loadCekRutinReport() {
   document.getElementById("reportCekRutinSection").style.display = "block";
 
   fetch(
-    "https://script.google.com/macros/s/AKfycbzdMdw6ZNMoj1IimADGcl2mVf0WHCgx9dBOys5BFPfMt4th8NmsuLlbO2DeZYV1aaPxRQ/exec"
+     "https://script.google.com/macros/s/AKfycbzdMdw6ZNMoj1IimADGcl2mVf0WHCgx9dBOys5BFPfMt4th8NmsuLlbO2DeZYV1aaPxRQ/exec?type=cek_rutin"
   )
     .then((res) => res.json())
     .then((data) => {
@@ -2867,12 +3024,25 @@ function generateTanggalHeader() {
     header.appendChild(th);
   }
 }
+function refreshMonitoring() {
+  console.log("🔄 Refresh:", activeMonitoringType);
+  loadMonitoringData(activeMonitoringType);
+}
 
 // =========================
 // 🔥 LOAD MULTI LOCATION
 // =========================
-async function loadMonitoringData(type = "jambi") {
+async function loadMonitoringData(type = activeMonitoringType) {
+  // simpan lokasi aktif
+  activeMonitoringType = type;
+
   const tbody = document.getElementById("monitoringTableBody");
+  const mdvrHeader = document.getElementById("mdvrHeader");
+
+  // tampilkan MDVR hanya untuk Rantau
+  if (mdvrHeader) {
+    mdvrHeader.style.display = type === "rantau" ? "" : "none";
+  }
 
   if (!tbody) {
     console.error("❌ monitoringTableBody tidak ditemukan");
@@ -2885,6 +3055,7 @@ async function loadMonitoringData(type = "jambi") {
     const API_URL = API_MAP[type];
 
     console.log("TYPE =", type);
+    console.log("ACTIVE TYPE =", activeMonitoringType);
     console.log("API URL =", API_URL);
 
     if (!API_URL) {
@@ -2921,7 +3092,6 @@ async function loadMonitoringData(type = "jambi") {
     }
 
     console.log("DATA API =", json);
-
     // =========================
     // 🔥 HEADER
     // =========================
@@ -3009,10 +3179,31 @@ async function loadMonitoringData(type = "jambi") {
           </td>
 
           <td>${getVal(d, ["Status RFID"])}</td>
-          <td>${getVal(d, ["Status Fuel Stock", "Status Fuel Stick"])}</td>
-          <td>${getVal(d, ["Remarks"])}</td>
-          <td>${getVal(d, ["Pengecekan Unit"])}</td>
-          <td>${getVal(d, ["Duration Eror/Hari"])}</td>
+
+          <td>
+              ${getVal(d, [
+              "Status Fuel Stock",
+              "Status Fuel Stick"
+              ])}
+          </td>
+
+         ${
+           type === "rantau"
+            ? `
+         <td class="${
+            getVal(d, ["Status MDVR"]) === "Active"
+            ? "active"
+            : "inactive"
+             }">
+           ${getVal(d, ["Status MDVR"])}
+       </td>
+           `
+           : ""
+          }
+
+        <td>${getVal(d, ["Remarks"])}</td>
+        <td>${getVal(d, ["Pengecekan Unit"])}</td>
+        <td>${getVal(d, ["Duration Eror/Hari"])}</td>
       `;
 
       for (let i = 1; i <= 31; i++) {
@@ -3038,6 +3229,13 @@ async function loadMonitoringData(type = "jambi") {
       "<tr><td colspan='50'>❌ Gagal load data (cek console)</td></tr>";
   }
 }
+
+const monitoringBody = document.querySelector(".monitoring-body");
+const monitoringHeader = document.querySelector(".monitoring-header");
+
+monitoringBody.addEventListener("scroll", function () {
+  monitoringHeader.scrollLeft = monitoringBody.scrollLeft;
+});
 // =========================
 // 🔥 AUTO DEFAULT JAMI
 // =========================
@@ -3660,6 +3858,7 @@ function refreshSummary() {
 const rowsPerPage = 100;
 let currentPage = 1;
 let allReportData = [];
+let filteredData = [];
 
 // ===================== LOAD DATA LAPORAN =====================
 async function loadReport() {
@@ -3707,7 +3906,9 @@ function renderReportTable() {
 
   const start = (currentPage - 1) * rowsPerPage;
   const end = start + rowsPerPage;
-  const pageData = allReportData.slice(start, end);
+  const dataSource =
+  filteredData.length ? filteredData : allReportData;
+  const pageData = dataSource.slice(start, end);
 
   pageData.forEach((item, i) => {
     const row = document.createElement("tr");
@@ -3868,7 +4069,14 @@ async function deleteItem(jobNumber) {
 }
 // ===================== PAGINATION DENGAN ANGKA =====================
 function renderPaginationNumbers() {
-  const totalPages = Math.ceil(allReportData.length / rowsPerPage);
+
+  // 🔥 TAMBAHAN
+  const dataSource =
+    filteredData.length ? filteredData : allReportData;
+
+  // 🔥 GANTI totalPages
+  const totalPages = Math.ceil(dataSource.length / rowsPerPage);
+
   let paginationContainer = document.getElementById("pagination");
 
   if (!paginationContainer) {
@@ -3877,49 +4085,87 @@ function renderPaginationNumbers() {
     paginationContainer.style.textAlign = "center";
     paginationContainer.style.margin = "15px 0";
     paginationContainer.style.userSelect = "none";
-    document.querySelector(".table-responsive").after(paginationContainer);
+
+    document
+      .querySelector(".table-responsive")
+      .after(paginationContainer);
   }
 
-  let buttonsHTML = `<span class="page-btn" onclick="changePage(-1)" ${
-    currentPage === 1 ? "style='opacity:0.5;pointer-events:none;'" : ""
-  }>⬅</span>`;
+  let buttonsHTML = `
+    <span class="page-btn"
+      onclick="changePage(-1)"
+      ${
+        currentPage === 1
+          ? "style='opacity:0.5;pointer-events:none;'"
+          : ""
+      }>
+      ⬅
+    </span>
+  `;
 
   for (let i = 1; i <= totalPages; i++) {
     buttonsHTML += `
       <span class="page-number ${
         i === currentPage ? "active" : ""
-      }" onclick="goToPage(${i})">${i}</span>
+      }"
+      onclick="goToPage(${i})">
+        ${i}
+      </span>
     `;
   }
 
-  buttonsHTML += `<span class="page-btn" onclick="changePage(1)" ${
-    currentPage === totalPages ? "style='opacity:0.5;pointer-events:none;'" : ""
-  }>➡</span>`;
+  buttonsHTML += `
+    <span class="page-btn"
+      onclick="changePage(1)"
+      ${
+        currentPage === totalPages
+          ? "style='opacity:0.5;pointer-events:none;'"
+          : ""
+      }>
+      ➡
+    </span>
+  `;
 
   paginationContainer.innerHTML = buttonsHTML;
 }
 
 function goToPage(page) {
   currentPage = page;
+
   renderReportTable();
+
   document
     .querySelector(".table-responsive")
-    .scrollIntoView({ behavior: "smooth" });
+    .scrollIntoView({
+      behavior: "smooth",
+    });
 }
 
 function changePage(direction) {
-  const totalPages = Math.ceil(allReportData.length / rowsPerPage);
+
+  // 🔥 TAMBAHAN
+  const dataSource =
+    filteredData.length ? filteredData : allReportData;
+
+  // 🔥 GANTI totalPages
+  const totalPages = Math.ceil(
+    dataSource.length / rowsPerPage
+  );
+
   const newPage = currentPage + direction;
 
   if (newPage >= 1 && newPage <= totalPages) {
     currentPage = newPage;
+
     renderReportTable();
+
     document
       .querySelector(".table-responsive")
-      .scrollIntoView({ behavior: "smooth" });
+      .scrollIntoView({
+        behavior: "smooth",
+      });
   }
 }
-
 // ===================== RENDER FOTO =====================
 function renderPhotoCell(photoField) {
   if (!photoField) return "❌ Tidak ada foto";
@@ -4602,8 +4848,10 @@ function openDetail(item = {}) {
   <div>
     <h1>Indosat Ooredoo & Pertamina Jambi Project</h1>
     <h2>Laporan Pekerjaan (Job Report)</h2>
-    <p style="margin:3px 0; font-size:14px;">Alamat: Kenali Asam Atas, Kota Baru, Kota Jambi</p>
-    <p style="margin:3px 0; font-size:14px;">WhatsApp: DA. 0852-6762-7060 | Teknisi VTS 0895-3822-81515</p>
+    <p style="margin:3px 0; font-size:14px;">Alamat: Kantor Pusat PT Indosat (KPPTI) Lt. 18
+Jl. Medan Merdeka Barat No.21
+Daerah Khusus Ibukota Jakarta, 10110</p>
+    <p style="margin:3px 0; font-size:14px;">WhatsApp:ICT Service Indosat. +62 855-7556-677 | Teknisi VTS Jambi 0895-3822-81515</p>
   </div>
 </div>
 
@@ -5208,25 +5456,31 @@ async function downloadExcel() {
 
 // ===================== PENCARIAN SPESIFIK BERDASARKAN JOB NUMBER =====================
 function filterTable() {
-  const searchJob = document.getElementById("searchJob").value.toLowerCase();
+  const searchJob = document
+    .getElementById("searchJob")
+    .value.toLowerCase();
+
   const searchVehicle = document
     .getElementById("searchVehicle")
     .value.toLowerCase();
-  const table = document.getElementById("reportTable");
-  const rows = table.getElementsByTagName("tr");
 
-  for (let i = 1; i < rows.length; i++) {
-    const jobCell = rows[i].getElementsByTagName("td")[1]; // Kolom No Pekerjaan
-    const vehicleCell = rows[i].getElementsByTagName("td")[9]; // Kolom Vehicle ID
+  filteredData = allReportData.filter((item) => {
+    const job = (item["Job Number"] || "")
+      .toLowerCase();
 
-    const matchJob =
-      jobCell && jobCell.textContent.toLowerCase().includes(searchJob);
-    const matchVehicle =
-      vehicleCell &&
-      vehicleCell.textContent.toLowerCase().includes(searchVehicle);
+    const vehicle = (
+      item["Vehicle id"] || ""
+    ).toLowerCase();
 
-    rows[i].style.display = matchJob && matchVehicle ? "" : "none";
-  }
+    return (
+      job.includes(searchJob) &&
+      vehicle.includes(searchVehicle)
+    );
+  });
+
+  currentPage = 1;
+
+  renderReportTable();
 }
 
 function clearSearchJob() {
@@ -5237,4 +5491,63 @@ function clearSearchJob() {
 function clearSearchVehicle() {
   document.getElementById("searchVehicle").value = "";
   filterTable(); // Refresh filter setelah input dikosongkan
+}
+function toggleSettingMenu(e){
+    e.stopPropagation();
+
+    const menu = document.getElementById("settingMenu");
+    menu.classList.toggle("show");
+}
+
+/* klik luar = tutup */
+document.addEventListener("click", function(e){
+    const wrapper = document.querySelector(".setting-wrapper");
+    const menu = document.getElementById("settingMenu");
+
+    if(wrapper && !wrapper.contains(e.target)){
+        menu.classList.remove("show");
+    }
+});
+
+/* upload wallpaper */
+document.addEventListener("DOMContentLoaded", ()=>{
+
+    const input = document.getElementById("wallpaperInput");
+
+    if(input){
+        input.addEventListener("change", function(e){
+
+            const file = e.target.files[0];
+            if(!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = function(ev){
+                const img = ev.target.result;
+
+                document.body.style.background =
+                    `url(${img}) center center / cover no-repeat fixed`;
+
+                localStorage.setItem("dashboardWallpaper", img);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+
+    /* load saved wallpaper */
+    const savedWallpaper = localStorage.getItem("dashboardWallpaper");
+
+    if(savedWallpaper){
+        document.body.style.background =
+            `url(${savedWallpaper}) center center / cover no-repeat fixed`;
+    }
+});
+
+/* reset */
+function resetWallpaper(){
+    localStorage.removeItem("dashboardWallpaper");
+    document.body.style.background = "#f4f6fb";
+
+    document.getElementById("settingMenu").classList.remove("show");
 }
